@@ -37,11 +37,3 @@ void AMousePlayerController::SetupInputComponent()
 		}
 	}
 }
-
-void AMousePlayerController::OnPointerDown(const FInputActionValue& Value)
-{
-}
-
-void AMousePlayerController::OnPointerUp(const FInputActionValue& Value)
-{
-}

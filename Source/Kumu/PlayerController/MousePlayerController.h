@@ -35,6 +35,6 @@ public:
 	virtual void SetupInputComponent() override;
 	
 protected:
-	virtual void OnPointerDown(const FInputActionValue& Value);// PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonDown,);
-	virtual void OnPointerUp(const FInputActionValue& Value);// PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonUp,);
+	virtual void OnPointerDown(const FInputActionValue& Value) PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonDown,);
+	virtual void OnPointerUp(const FInputActionValue& Value) PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonUp,);
 };
