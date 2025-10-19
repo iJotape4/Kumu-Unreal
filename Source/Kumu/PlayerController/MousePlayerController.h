@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "MousePlayerController.generated.h"
 
+struct FInputActionValue;
+class UInputAction;
+class UInputMappingContext;
 /**
  * 
  */
@@ -13,17 +16,25 @@ UCLASS(Abstract)
 class KUMU_API AMousePlayerController : public APlayerController
 {
 	GENERATED_BODY()
+	
+protected:
+	UPROPERTY(EditAnywhere, Category="Input|Input Mappings")
+	TArray<UInputMappingContext*> DefaultMappingContexts;
 
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* IA_PrimaryPointer_PressAction;
+
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* SecondaryPointerAction;
+
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* ThirdPointerAction;
+	
 public:
 	virtual void BeginPlay() override;
-
-protected:
-	virtual void OnLeftMouseButtonDown() PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonDown,);
-	virtual void OnLeftMouseButtonUp() PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonUp,);
+	virtual void SetupInputComponent() override;
 	
-	virtual void OnRightMouseButtonDown() PURE_VIRTUAL(AMousePlayerController::OnRightMouseButtonDown,);
-	virtual void OnRightMouseButtonUp() PURE_VIRTUAL(AMousePlayerController::OnRightMouseButtonUp,);
-
-	virtual  void OnMiddleMouseButtonDown() PURE_VIRTUAL(AMousePlayerController::OnMiddleMouseButtonDown,);
-	virtual void OnMiddleMouseButtonUp() PURE_VIRTUAL(AMousePlayerController::OnMiddleMouseButtonUp,);
+protected:
+	virtual void OnPointerDown(const FInputActionValue& Value);// PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonDown,);
+	virtual void OnPointerUp(const FInputActionValue& Value);// PURE_VIRTUAL(AMousePlayerController::OnLeftMouseButtonUp,);
 };

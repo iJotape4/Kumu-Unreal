@@ -30,14 +30,14 @@ void AADragNDropPlayerController::PlayerTick(float DeltaTime)
 void AADragNDropPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	if (InputComponent)
-	{
-		InputComponent->BindKey(EKeys::LeftMouseButton, IE_Pressed, this, &AADragNDropPlayerController::OnLeftMouseButtonDown);
-		InputComponent->BindKey(EKeys::LeftMouseButton, IE_Released, this, &AADragNDropPlayerController::OnLeftMouseButtonUp);
-	}
+	// if (InputComponent)
+	// {
+	// 	InputComponent->BindKey(EKeys::LeftMouseButton, IE_Pressed, this, &AADragNDropPlayerController::OnPointerDown);
+	// 	InputComponent->BindKey(EKeys::LeftMouseButton, IE_Released, this, &AADragNDropPlayerController::OnPointerUp);
+	// }
 }
 
-void AADragNDropPlayerController::OnLeftMouseButtonDown()
+void AADragNDropPlayerController::OnPointerDown(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnLeftMouseButtonDown"));
 	FHitResult Hit;
@@ -57,7 +57,7 @@ void AADragNDropPlayerController::OnLeftMouseButtonDown()
 	}
 }
 
-void AADragNDropPlayerController::OnLeftMouseButtonUp()
+void AADragNDropPlayerController::OnPointerUp(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnleftMouseButtonUp"));
 	if (bIsDragging && DraggedActor)

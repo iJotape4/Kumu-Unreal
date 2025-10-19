@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Kumu/PlayerController/MousePlayerController.h"
 #include "ADragNDropPlayerController.generated.h"
-
 /**
  * 
  */
@@ -14,14 +13,15 @@ class KUMU_API AADragNDropPlayerController : public AMousePlayerController
 {
 	GENERATED_BODY()
 
+	
 public:
 	virtual void BeginPlay() override;
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
 
 protected:
-	virtual void OnLeftMouseButtonDown() override;
-	virtual void OnLeftMouseButtonUp() override;
+	virtual void OnPointerDown(const FInputActionValue& Value) override;
+	virtual void OnPointerUp(const FInputActionValue& Value) override;
 	
 private:
 	AActor* DraggedActor;
