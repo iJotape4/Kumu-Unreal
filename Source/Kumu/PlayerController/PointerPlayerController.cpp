@@ -31,16 +31,16 @@ void APointerPlayerController::SetupInputComponent()
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 		{
 			// Setup mouse input events
-			EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &APointerPlayerController::OnInputStarted);
-			EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnSetDestinationTriggered);
-			EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnSetDestinationReleased);
-			EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnSetDestinationReleased);
+			EnhancedInputComponent->BindAction(PrimaryPointerAction, ETriggerEvent::Started, this, &APointerPlayerController::OnPointerDown);
+			EnhancedInputComponent->BindAction(PrimaryPointerAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnPointerHold);
+			EnhancedInputComponent->BindAction(PrimaryPointerAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnPointerUp);
+			EnhancedInputComponent->BindAction(PrimaryPointerAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnPointerUp);
 
 			// Setup touch input events
-			EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Started, this, &APointerPlayerController::OnInputStarted);
-			EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnTouchTriggered);
-			EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnTouchReleased);
-			EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnTouchReleased);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Started, this, &APointerPlayerController::OnPointerDown);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnTouchTriggered);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnTouchReleased);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnTouchReleased);
 		}
 		else
 		{

@@ -33,9 +33,9 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 	/** Input handlers */
-	virtual void OnInputStarted() override;
-	virtual void OnSetDestinationTriggered() override;
-	virtual void OnSetDestinationReleased() override;
+	virtual void OnPointerDown() override;
+	virtual void OnPointerHold() override;
+	virtual void OnPointerUp() override;
 	virtual void OnTouchTriggered() override;
 	virtual void OnTouchReleased() override;
 };

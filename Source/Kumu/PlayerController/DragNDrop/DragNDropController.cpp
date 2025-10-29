@@ -17,13 +17,13 @@ void ADragNDropController::SetupInputComponent()
 	Super::SetupInputComponent();
 }
 
-void ADragNDropController::OnInputStarted()
+void ADragNDropController::OnPointerDown()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Started"));
 	StopMovement();
 }
 
-void ADragNDropController::OnSetDestinationTriggered()
+void ADragNDropController::OnPointerHold()
 {
 	FHitResult Hit;
 	bool bHitSuccessful = false;
@@ -49,7 +49,7 @@ void ADragNDropController::OnSetDestinationTriggered()
 	}
 }
 
-void ADragNDropController::OnSetDestinationReleased()
+void ADragNDropController::OnPointerUp()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Released"));
 
@@ -59,11 +59,11 @@ void ADragNDropController::OnSetDestinationReleased()
 void ADragNDropController::OnTouchTriggered()
 {
 	bIsTouch = true;
-	OnSetDestinationTriggered();
+	OnPointerHold();
 }
 
 void ADragNDropController::OnTouchReleased()
 {
 	bIsTouch = false;
-	OnSetDestinationReleased();
+	OnPointerUp();
 }

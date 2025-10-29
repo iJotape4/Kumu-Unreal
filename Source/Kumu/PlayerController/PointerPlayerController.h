@@ -32,11 +32,11 @@ protected:
 	
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* SetDestinationClickAction;
+	UInputAction* PrimaryPointerAction;
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* SetDestinationTouchAction;
+	UInputAction* PrimaryTouchAction;
 
 	/** Set to true if we're using touch input */
 	uint32 bIsTouch : 1;
@@ -45,9 +45,9 @@ protected:
 	virtual void SetupInputComponent() override;
 
 	/** Input handlers */
-	virtual void OnInputStarted() PURE_VIRTUAL(APointerPlayerController::OnInputStarted, );
-	virtual void OnSetDestinationTriggered() PURE_VIRTUAL(APointerPlayerController::OnSetDestinationTriggered, );
-	virtual void OnSetDestinationReleased() PURE_VIRTUAL(APointerPlayerController::OnSetDestinationReleased, );
+	virtual void OnPointerDown() PURE_VIRTUAL(APointerPlayerController::OnPointerDown, );
+	virtual void OnPointerHold() PURE_VIRTUAL(APointerPlayerController::OnPointerHold, );
+	virtual void OnPointerUp() PURE_VIRTUAL(APointerPlayerController::OnPointerUp, );
 	virtual void OnTouchTriggered() PURE_VIRTUAL(APointerPlayerController::OnTouchTriggered, );
 	virtual void OnTouchReleased() PURE_VIRTUAL(APointerPlayerController::OnTouchReleased, );
 };
