@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void BeginDrag_Implementation(const FVector& WorldLocation) override;
-	virtual void Drag_Implementation(const FVector& WorldLocation, const FVector& Delta) override;
+	virtual void Drag_Implementation(const FVector& WorldLocation) override;
 	virtual void EndDrag_Implementation() override;
 
 private:

@@ -11,6 +11,29 @@ ADragNDropController::ADragNDropController()
 {
 }
 
+void ADragNDropController::PlayerTick(float DeltaTime)
+{ 
+	Super::PlayerTick(DeltaTime);
+	if (!bIsDragging || !DraggedActor) return;
+
+	FVector WorldPos;
+	
+	if (GetCursorWorldProjection(WorldPos))
+	{
+		IDraggable::Execute_Drag(DraggedActor, WorldPos);
+	}
+}
+
+bool ADragNDropController::GetCursorWorldProjection(FVector& OutWorldLocation) const
+{
+	FHitResult Hit;
+	if ( !GetHitResultUnderCursor(ECC_Visibility, true, Hit))
+		return false;
+	
+	OutWorldLocation = Hit.ImpactPoint;
+	return true;
+}
+
 void ADragNDropController::SetupInputComponent()
 {
 	// set up gameplay key bindings
@@ -20,11 +43,6 @@ void ADragNDropController::SetupInputComponent()
 void ADragNDropController::OnPointerDown()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Started"));
-	StopMovement();
-}
-
-void ADragNDropController::OnPointerHold()
-{
 	FHitResult Hit;
 	bool bHitSuccessful = false;
 	
@@ -44,15 +62,31 @@ void ADragNDropController::OnPointerHold()
 		TArray<UActorComponent*> DraggableComps = HitActor->GetComponentsByInterface(UDraggable::StaticClass());
 		if (DraggableComps.Num() > 0)
 		{
-			IDraggable::Execute_BeginDrag(DraggableComps[0], Hit.ImpactPoint);
+			DraggedActor = DraggableComps[0];
+			// DragPlaneOrigin = Hit.ImpactPoint;
+			// DragPlaneNormal = FVector::UpVector; // simple horizontal plane; adjust if needed
+			// LastDragWorldLocation = Hit.ImpactPoint;
+			bIsDragging = true;
+			IDraggable::Execute_BeginDrag(DraggedActor, Hit.ImpactPoint);
 		}
 	}
+}
+
+void ADragNDropController::OnPointerHold()
+{
+	if (!DraggedActor)
+		return;
 }
 
 void ADragNDropController::OnPointerUp()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Released"));
-
+	if (bIsDragging && DraggedActor)
+	{
+		IDraggable::Execute_EndDrag(DraggedActor);
+	}
+	DraggedActor = nullptr;
+	bIsDragging = false;
 }
 
 // Triggered every frame when the input is held down

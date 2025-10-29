@@ -26,6 +26,14 @@ public:
 
 	/** Constructor */
 	ADragNDropController();
+	virtual void PlayerTick(float DeltaTime) override;
+private:
+	UActorComponent* DraggedActor;
+	// FVector DragPlaneOrigin;
+	// FVector DragPlaneNormal;
+	// FVector LastDragWorldLocation;
+	bool bIsDragging;
+	bool GetCursorWorldProjection(FVector& OutWorldLocation) const;
 
 protected:
 
@@ -38,4 +46,5 @@ protected:
 	virtual void OnPointerUp() override;
 	virtual void OnTouchTriggered() override;
 	virtual void OnTouchReleased() override;
+
 };

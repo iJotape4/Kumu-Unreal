@@ -26,9 +26,10 @@ void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
 	LastDragLocation = WorldLocation + DragOffset;
 }
 
-void UDragView::Drag_Implementation(const FVector& WorldLocation, const FVector& Delta)
+void UDragView::Drag_Implementation(const FVector& WorldLocation)
 {
 	if (!bDragging) return;
+	UE_LOG(LogTemp, Warning, TEXT("Dragging to Location: %s"), *WorldLocation.ToString());
 
 	const FVector NewLocation = WorldLocation + DragOffset;
 	OwnerActor->SetActorLocation(NewLocation);

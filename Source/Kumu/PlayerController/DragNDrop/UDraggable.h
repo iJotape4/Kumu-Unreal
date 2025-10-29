@@ -25,7 +25,7 @@ public:
 	void BeginDrag(const FVector &WorldLocation);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drag")
-	void Drag(const FVector &WorldLocation, const FVector &Delta);
+	void Drag(const FVector &WorldLocation);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drag")
 	void EndDrag();
