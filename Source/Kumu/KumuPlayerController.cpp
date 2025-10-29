@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "Kumu.h"
+#include "PlayerController/DragNDrop/UDraggable.h"
 
 AKumuPlayerController::AKumuPlayerController()
 {
@@ -69,23 +70,27 @@ void AKumuPlayerController::OnInputStarted()
 
 void AKumuPlayerController::OnSetDestinationTriggered()
 {
-	// We look for the location in the world where the player has pressed the input
 	FHitResult Hit;
 	bool bHitSuccessful = false;
+	
 	if (bIsTouch)
-	{
 		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	}
 	else
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
+		bHitSuccessful = GetHitResultUnderCursor(ECC_Visibility, true, Hit);
+	
 
-	// If we hit a surface, cache the location
-	if (bHitSuccessful)
+	if (!bHitSuccessful)
+		return;
+	
+	AActor* HitActor = Hit.GetActor();
+	UE_LOG( LogKumu, Warning, TEXT("Hit actor : %s"), *HitActor->GetClass()->GetName())
+	if (HitActor)
 	{
-		CachedDestination = Hit.Location;
-		UE_LOG(LogKumu, Warning, TEXT("Input Location: %s"), *CachedDestination.ToString());
+		TArray<UActorComponent*> DraggableComps = HitActor->GetComponentsByInterface(UDraggable::StaticClass());
+		if (DraggableComps.Num() > 0)
+		{
+			IDraggable::Execute_BeginDrag(DraggableComps[0], Hit.ImpactPoint);
+		}
 	}
 }
 
