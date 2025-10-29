@@ -6,7 +6,7 @@
 #include "Templates/SubclassOf.h"
 #include "GameFramework/PlayerController.h"
 #include "PlayerController/PointerPlayerController.h"
-#include "KumuPlayerController.generated.h"
+#include "DragNDropController.generated.h"
 
 class UInputMappingContext;
 class UInputAction;
@@ -18,14 +18,14 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements point and click based controls
  */
 UCLASS(abstract)
-class AKumuPlayerController : public APointerPlayerController
+class ADragNDropController : public APointerPlayerController
 {
 	GENERATED_BODY()
 
 public:
 
 	/** Constructor */
-	AKumuPlayerController();
+	ADragNDropController();
 
 protected:
 

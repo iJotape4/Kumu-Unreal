@@ -1,29 +1,29 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "KumuPlayerController.h"
+#include "DragNDropController.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
 #include "Kumu.h"
 #include "PlayerController/DragNDrop/UDraggable.h"
 
-AKumuPlayerController::AKumuPlayerController()
+ADragNDropController::ADragNDropController()
 {
 }
 
-void AKumuPlayerController::SetupInputComponent()
+void ADragNDropController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
 }
 
-void AKumuPlayerController::OnInputStarted()
+void ADragNDropController::OnInputStarted()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Started"));
 	StopMovement();
 }
 
-void AKumuPlayerController::OnSetDestinationTriggered()
+void ADragNDropController::OnSetDestinationTriggered()
 {
 	FHitResult Hit;
 	bool bHitSuccessful = false;
@@ -49,20 +49,20 @@ void AKumuPlayerController::OnSetDestinationTriggered()
 	}
 }
 
-void AKumuPlayerController::OnSetDestinationReleased()
+void ADragNDropController::OnSetDestinationReleased()
 {
 	UE_LOG(LogKumu, Warning, TEXT("Input Released"));
 
 }
 
 // Triggered every frame when the input is held down
-void AKumuPlayerController::OnTouchTriggered()
+void ADragNDropController::OnTouchTriggered()
 {
 	bIsTouch = true;
 	OnSetDestinationTriggered();
 }
 
-void AKumuPlayerController::OnTouchReleased()
+void ADragNDropController::OnTouchReleased()
 {
 	bIsTouch = false;
 	OnSetDestinationReleased();
