@@ -8,7 +8,6 @@
 #include "PlayerController/PointerPlayerController.h"
 #include "KumuPlayerController.generated.h"
 
-class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
 

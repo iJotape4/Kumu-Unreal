@@ -2,29 +2,19 @@
 
 #include "KumuPlayerController.h"
 #include "GameFramework/Pawn.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
-#include "NiagaraSystem.h"
-#include "NiagaraFunctionLibrary.h"
-#include "KumuCharacter.h"
 #include "Engine/World.h"
-#include "EnhancedInputComponent.h"
-#include "InputActionValue.h"
-#include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "Kumu.h"
 #include "PlayerController/DragNDrop/UDraggable.h"
 
 AKumuPlayerController::AKumuPlayerController()
 {
-	
 }
 
 void AKumuPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
-
-	
 }
 
 void AKumuPlayerController::OnInputStarted()
