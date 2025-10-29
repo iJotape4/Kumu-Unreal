@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Templates/SubclassOf.h"
 #include "GameFramework/PlayerController.h"
+#include "PlayerController/PointerPlayerController.h"
 #include "KumuPlayerController.generated.h"
 
 class UNiagaraSystem;
@@ -18,43 +19,9 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements point and click based controls
  */
 UCLASS(abstract)
-class AKumuPlayerController : public APlayerController
+class AKumuPlayerController : public APointerPlayerController
 {
 	GENERATED_BODY()
-
-protected:
-
-	/** Time Threshold to know if it was a short press */
-	UPROPERTY(EditAnywhere, Category="Input")
-	float ShortPressThreshold;
-
-	/** FX Class that we will spawn when clicking */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UNiagaraSystem* FXCursor;
-
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputMappingContext* DefaultMappingContext;
-	
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* SetDestinationClickAction;
-
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* SetDestinationTouchAction;
-
-	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
-
-	/** Set to true if we're using touch input */
-	uint32 bIsTouch : 1;
-
-	/** Saved location of the character movement destination */
-	FVector CachedDestination;
-
-	/** Time that the click input has been pressed */
-	float FollowTime = 0.0f;
 
 public:
 
@@ -67,12 +34,9 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 	/** Input handlers */
-	void OnInputStarted();
-	void OnSetDestinationTriggered();
-	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
-
+	virtual void OnInputStarted() override;
+	virtual void OnSetDestinationTriggered() override;
+	virtual void OnSetDestinationReleased() override;
+	virtual void OnTouchTriggered() override;
+	virtual void OnTouchReleased() override;
 };
-
-
