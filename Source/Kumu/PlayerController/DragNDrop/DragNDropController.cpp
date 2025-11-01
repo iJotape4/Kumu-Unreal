@@ -11,19 +11,6 @@ ADragNDropController::ADragNDropController()
 {
 }
 
-void ADragNDropController::PlayerTick(float DeltaTime)
-{ 
-	Super::PlayerTick(DeltaTime);
-	if (!bIsDragging || !DraggedActor) return;
-
-	FVector WorldPos;
-	
-	if (GetCursorWorldProjection(WorldPos))
-	{
-		IDraggable::Execute_Drag(DraggedActor, WorldPos);
-	}
-}
-
 bool ADragNDropController::GetCursorWorldProjection(FVector& OutWorldLocation) const
 {
 	FHitResult Hit;
@@ -74,8 +61,14 @@ void ADragNDropController::OnPointerDown()
 
 void ADragNDropController::OnPointerHold()
 {
-	if (!DraggedActor)
-		return;
+	if (!bIsDragging || !DraggedActor) return;
+
+	FVector WorldPos;
+	
+	if (GetCursorWorldProjection(WorldPos))
+	{
+		IDraggable::Execute_Drag(DraggedActor, WorldPos);
+	}
 }
 
 void ADragNDropController::OnPointerUp()

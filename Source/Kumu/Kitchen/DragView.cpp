@@ -44,8 +44,12 @@ void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Begin Drag at Location: %s"), *WorldLocation.ToString());
 	bDragging = true;
-	DragOffset = WorldLocation - OwnerActor->GetActorLocation();
-	LastDragLocation = WorldLocation + DragOffset;
+	DragPlaneOrigin = WorldLocation;
+	LastDragLocation =  OwnerActor ->GetActorLocation();
+	DragOffset = LastDragLocation-WorldLocation;
+	//UE_LOG(LogTemp, Warning, TEXT("WorldLocation: %s"), *WorldLocation.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Drag Offset: %s"), *DragOffset.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Last Drag Location: %s"), *LastDragLocation.ToString());
 }
 
 void UDragView::Drag_Implementation(const FVector& WorldLocation)
@@ -53,9 +57,8 @@ void UDragView::Drag_Implementation(const FVector& WorldLocation)
 	if (!bDragging) return;
 	UE_LOG(LogTemp, Warning, TEXT("Dragging to Location: %s"), *WorldLocation.ToString());
 
-	const FVector NewLocation = WorldLocation + DragOffset;
+	const FVector NewLocation = FVector(WorldLocation.X, DragPlaneOrigin.Y, WorldLocation.Z) + DragOffset;
 	OwnerActor->SetActorLocation(NewLocation);
-	LastDragLocation = NewLocation;
 }
 
 void UDragView::EndDrag_Implementation()

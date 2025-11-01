@@ -26,7 +26,6 @@ public:
 
 	/** Constructor */
 	ADragNDropController();
-	virtual void PlayerTick(float DeltaTime) override;
 private:
 	UActorComponent* DraggedActor;
 	// FVector DragPlaneOrigin;
