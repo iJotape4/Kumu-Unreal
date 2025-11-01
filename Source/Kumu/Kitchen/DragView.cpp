@@ -9,6 +9,20 @@ UDragView::UDragView()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryComponentTick.bCanEverTick = true;
 	OwnerActor = GetOwner();
+	if (OwnerActor)
+	{
+		if (USceneComponent* Root = OwnerActor->GetRootComponent())
+			Root->SetMobility(EComponentMobility::Movable);
+	}
+}
+
+UDragView::~UDragView()
+{
+	if (OwnerActor)
+	{
+		if (USceneComponent* Root = OwnerActor->GetRootComponent())
+				Root->SetMobility(EComponentMobility::Static);
+	}
 }
 
 // Called when the game starts or when spawned
