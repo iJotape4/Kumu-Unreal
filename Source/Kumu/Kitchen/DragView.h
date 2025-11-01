@@ -16,7 +16,8 @@ class KUMU_API UDragView : public UActorComponent, public IDraggable
 	
 public:	
 	UDragView();
-	virtual ~UDragView() override;
+	virtual void OnRegister() override;
+	virtual  void OnUnregister() override;
 
 protected:
 	virtual void BeginPlay() override;
