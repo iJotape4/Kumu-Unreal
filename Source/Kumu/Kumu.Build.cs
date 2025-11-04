@@ -23,7 +23,7 @@ public class Kumu : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Paper2D" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"Kumu",
