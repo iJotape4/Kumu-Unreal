@@ -5,6 +5,7 @@
 
 #include "GameplayTagsManager.h"
 #include "Kumu.h"
+#include "SortingLayerUtils.h"
 
 
 // Sets default values for this component's properties
@@ -19,7 +20,7 @@ void USortingLayerModifier::OnRegister()
 	{
 		Sprite = GetOwner()->FindComponentByClass<UPaperSpriteComponent>();
 	}
-
+	SortingLayersAsset = SortingLayerUtils::GetSortingLayersAsset();
 	ChangeSortingLayer(SortingLayer);
 }
 
