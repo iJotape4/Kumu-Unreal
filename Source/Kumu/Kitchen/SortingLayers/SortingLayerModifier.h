@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include  "PaperSpriteComponent.h"
 #include "SortingLayers.h"
+#include "SortingLayersData.h"
 #include "SortingLayerModifier.generated.h"
 
 	
@@ -26,6 +28,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sorting Layer", meta=(BlueprintSetter="SetSortingLayer"))
 	FSortingLayers SortingLayer;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Tags" , meta = (Categories = "SortingLayers"))
+	FGameplayTag SortingLayerEntry;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPaperSpriteComponent* Sprite;
