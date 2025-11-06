@@ -20,7 +20,7 @@ void USortingLayerModifier::OnRegister()
 	{
 		Sprite = GetOwner()->FindComponentByClass<UPaperSpriteComponent>();
 	}
-	SortingLayersAsset = SortingLayerUtils::GetSortingLayersAsset();
+	if (!SortingLayersAsset) SortingLayersAsset = SortingLayerUtils::GetSortingLayersAsset();
 	ChangeSortingLayer(SortingLayer);
 }
 
