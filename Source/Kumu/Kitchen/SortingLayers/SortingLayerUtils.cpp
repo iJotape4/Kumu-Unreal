@@ -1,6 +1,9 @@
 ﻿#include "SortingLayerUtils.h"
+#include "Misc/Paths.h"
+#include "HAL/PlatformFilemanager.h"
+#include "Misc/PackageName.h"
+#include "Engine/DataTable.h"
 
-#include "EngineUtils.h"
 
 FString SortingLayerUtils::FilePath = FPaths::ProjectContentDir() + TEXT(
 		"ThirdParty/2D_Tools/SortingLayers/DT_SortingLayers.uasset");

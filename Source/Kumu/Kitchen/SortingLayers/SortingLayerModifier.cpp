@@ -26,15 +26,17 @@ void USortingLayerModifier::OnRegister()
 
 int USortingLayerModifier::GetTagLocalIndex(FGameplayTag Tag)
 {
-	FGameplayTag parent = Tag.RequestDirectParent();
-	int index = 0;
-	for ( auto _tag : UGameplayTagsManager::Get().RequestGameplayTagChildren(parent))
-	{
-		if ( _tag == Tag )
-			return index;
+	if (!SortingLayersAsset) return 0;
 
-		index++;
+	TArray<FGameplayTagTableRow*> Rows;
+	SortingLayersAsset->GetAllRows<FGameplayTagTableRow>(TEXT("GetTagLocalIndex"), Rows);
+	for (int32 Index = 0; Index < Rows.Num(); Index++)
+	{
+		UE_LOG(LogKumu, Warning, TEXT("Row Name %s"), *Rows[Index]->Tag.ToString());
+		if (Rows[Index]->Tag == Tag.GetTagName())
+			return Index;
 	}
+
 	return 0;
 }
 

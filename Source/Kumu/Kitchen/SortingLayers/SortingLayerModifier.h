@@ -6,10 +6,10 @@
 #include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include  "PaperSpriteComponent.h"
-#include "SortingLayers.h"
+#include "Engine/DataTable.h"
 #include "SortingLayerModifier.generated.h"
 
-	
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KUMU_API USortingLayerModifier : public UActorComponent
 {
