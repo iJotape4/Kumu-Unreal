@@ -3,6 +3,7 @@
 
 #include "SortingLayerModifier.h"
 
+#include "GameplayTagsManager.h"
 #include "Kumu.h"
 
 
@@ -22,6 +23,20 @@ void USortingLayerModifier::OnRegister()
 	ChangeSortingLayer(SortingLayer);
 }
 
+int USortingLayerModifier::GetTagLocalIndex(FGameplayTag Tag)
+{
+	FGameplayTag parent = Tag.RequestDirectParent();
+	int index = 0;
+	for ( auto _tag : UGameplayTagsManager::Get().RequestGameplayTagChildren(parent))
+	{
+		if ( _tag == Tag )
+			return index;
+
+		index++;
+	}
+	return 0;
+}
+
 
 // Called when the game starts
 void USortingLayerModifier::BeginPlay()
@@ -29,21 +44,22 @@ void USortingLayerModifier::BeginPlay()
 	Super::BeginPlay();
 }
 
-void USortingLayerModifier::SetSortingLayer(FSortingLayers NewSortingLayer)
+void USortingLayerModifier::SetSortingLayer(FGameplayTag NewSortingLayer)
 {
 	ChangeSortingLayer(NewSortingLayer);
 }
 
-void USortingLayerModifier::ChangeSortingLayer(FSortingLayers NewSortingLayer)
+void USortingLayerModifier::ChangeSortingLayer(FGameplayTag NewSortingLayer)
 {
 	if (!Sprite) return;
 
 	SortingLayer = NewSortingLayer;
-	Sprite->TranslucencySortPriority = static_cast<int32>(SortingLayer);
+	int number = GetTagLocalIndex(NewSortingLayer);
+	Sprite->TranslucencySortPriority = number;
+	UE_LOG(LogKumu, Warning, TEXT("Changed Sorting Layer to %s with priority %d"), *SortingLayer.GetTagLeafName().ToString(), number);
+
 	// Make sure render state updates so changes are visible immediately in-game
 	Sprite->MarkRenderStateDirty();
-	
-	///Sprite->se
 }
 
 #if WITH_EDITOR

@@ -7,7 +7,6 @@
 #include "Components/ActorComponent.h"
 #include  "PaperSpriteComponent.h"
 #include "SortingLayers.h"
-#include "SortingLayersData.h"
 #include "SortingLayerModifier.generated.h"
 
 	
@@ -22,25 +21,23 @@ public:
 
 	virtual void OnRegister() override;
 
+	int GetTagLocalIndex(FGameplayTag Tag);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sorting Layer", meta=(BlueprintSetter="SetSortingLayer"))
-	FSortingLayers SortingLayer;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Tags" , meta = (Categories = "SortingLayers"))
-	FGameplayTag SortingLayerEntry;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sorting Layer" , meta = (Categories = "SortingLayers", BlueprintSetter="SetSortingLayer"))
+	FGameplayTag SortingLayer;
 	
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPaperSpriteComponent* Sprite;
 
 protected:
 	UFUNCTION(BlueprintSetter)
-	void SetSortingLayer(FSortingLayers NewSortingLayer);
+	void SetSortingLayer(FGameplayTag NewSortingLayer);
 	
-	void ChangeSortingLayer(FSortingLayers NewSortingLayer);
+	void ChangeSortingLayer(FGameplayTag NewSortingLayer);
 	
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
