@@ -29,7 +29,7 @@ void ADragNDropController::SetupInputComponent()
 
 void ADragNDropController::OnPointerDown()
 {
-	UE_LOG(LogKumu, Warning, TEXT("Input Started"));
+	//UE_LOG(LogKumu, Warning, TEXT("Input Started"));
 	FHitResult Hit;
 	bool bHitSuccessful = false;
 	
@@ -43,16 +43,13 @@ void ADragNDropController::OnPointerDown()
 		return;
 	
 	AActor* HitActor = Hit.GetActor();
-	UE_LOG( LogKumu, Warning, TEXT("Hit actor : %s"), *HitActor->GetClass()->GetName())
+	///UE_LOG( LogKumu, Warning, TEXT("Hit actor : %s"), *HitActor->GetClass()->GetName())
 	if (HitActor)
 	{
 		TArray<UActorComponent*> DraggableComps = HitActor->GetComponentsByInterface(UDraggable::StaticClass());
 		if (DraggableComps.Num() > 0)
 		{
 			DraggedActor = DraggableComps[0];
-			// DragPlaneOrigin = Hit.ImpactPoint;
-			// DragPlaneNormal = FVector::UpVector; // simple horizontal plane; adjust if needed
-			// LastDragWorldLocation = Hit.ImpactPoint;
 			bIsDragging = true;
 			IDraggable::Execute_BeginDrag(DraggedActor, Hit.ImpactPoint);
 		}
@@ -73,7 +70,7 @@ void ADragNDropController::OnPointerHold()
 
 void ADragNDropController::OnPointerUp()
 {
-	UE_LOG(LogKumu, Warning, TEXT("Input Released"));
+	//UE_LOG(LogKumu, Warning, TEXT("Input Released"));
 	if (bIsDragging && DraggedActor)
 	{
 		IDraggable::Execute_EndDrag(DraggedActor);
