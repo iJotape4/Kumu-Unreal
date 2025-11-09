@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include  "PaperSpriteComponent.h"
-#include "SortingLayers.h"
+#include "Engine/DataTable.h"
 #include "SortingLayerModifier.generated.h"
 
-	
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KUMU_API USortingLayerModifier : public UActorComponent
 {
@@ -20,21 +21,26 @@ public:
 
 	virtual void OnRegister() override;
 
+	int GetTagLocalIndex(FGameplayTag Tag);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sorting Layer", meta=(BlueprintSetter="SetSortingLayer"))
-	FSortingLayers SortingLayer;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sorting Layer")
+	UDataTable* SortingLayersAsset;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sorting Layer" , meta = (Categories = "SortingLayers", BlueprintSetter="SetSortingLayer"))
+	FGameplayTag SortingLayer;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPaperSpriteComponent* Sprite;
 
 protected:
 	UFUNCTION(BlueprintSetter)
-	void SetSortingLayer(FSortingLayers NewSortingLayer);
+	void SetSortingLayer(FGameplayTag NewSortingLayer);
 	
-	void ChangeSortingLayer(FSortingLayers NewSortingLayer);
+	void ChangeSortingLayer(FGameplayTag NewSortingLayer);
 	
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

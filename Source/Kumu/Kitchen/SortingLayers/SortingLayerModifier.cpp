@@ -3,7 +3,9 @@
 
 #include "SortingLayerModifier.h"
 
+#include "GameplayTagsManager.h"
 #include "Kumu.h"
+#include "SortingLayerUtils.h"
 
 
 // Sets default values for this component's properties
@@ -18,8 +20,24 @@ void USortingLayerModifier::OnRegister()
 	{
 		Sprite = GetOwner()->FindComponentByClass<UPaperSpriteComponent>();
 	}
-
+	if (!SortingLayersAsset) SortingLayersAsset = SortingLayerUtils::GetSortingLayersAsset();
 	ChangeSortingLayer(SortingLayer);
+}
+
+int USortingLayerModifier::GetTagLocalIndex(FGameplayTag Tag)
+{
+	if (!SortingLayersAsset) return 0;
+
+	TArray<FGameplayTagTableRow*> Rows;
+	SortingLayersAsset->GetAllRows<FGameplayTagTableRow>(TEXT("GetTagLocalIndex"), Rows);
+	for (int32 Index = 0; Index < Rows.Num(); Index++)
+	{
+		UE_LOG(LogKumu, Warning, TEXT("Row Name %s"), *Rows[Index]->Tag.ToString());
+		if (Rows[Index]->Tag == Tag.GetTagName())
+			return Index;
+	}
+
+	return 0;
 }
 
 
@@ -29,21 +47,22 @@ void USortingLayerModifier::BeginPlay()
 	Super::BeginPlay();
 }
 
-void USortingLayerModifier::SetSortingLayer(FSortingLayers NewSortingLayer)
+void USortingLayerModifier::SetSortingLayer(FGameplayTag NewSortingLayer)
 {
 	ChangeSortingLayer(NewSortingLayer);
 }
 
-void USortingLayerModifier::ChangeSortingLayer(FSortingLayers NewSortingLayer)
+void USortingLayerModifier::ChangeSortingLayer(FGameplayTag NewSortingLayer)
 {
 	if (!Sprite) return;
 
 	SortingLayer = NewSortingLayer;
-	Sprite->TranslucencySortPriority = static_cast<int32>(SortingLayer);
+	int number = GetTagLocalIndex(NewSortingLayer);
+	Sprite->TranslucencySortPriority = number;
+	UE_LOG(LogKumu, Warning, TEXT("Changed Sorting Layer to %s with priority %d"), *SortingLayer.GetTagLeafName().ToString(), number);
+
 	// Make sure render state updates so changes are visible immediately in-game
 	Sprite->MarkRenderStateDirty();
-	
-	///Sprite->se
 }
 
 #if WITH_EDITOR
