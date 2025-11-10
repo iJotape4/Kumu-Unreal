@@ -26,6 +26,9 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sorting Layer")
+	UDataTable* SortingLayersAsset;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sorting Layer" , meta = (Categories = "SortingLayers", BlueprintSetter="SetSortingLayer"))
 	FGameplayTag SortingLayer;
