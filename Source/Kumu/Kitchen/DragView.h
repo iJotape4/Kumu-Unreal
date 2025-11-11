@@ -31,6 +31,7 @@ private:
 	FVector DragOffset;
 	FVector LastDragLocation;
 	TObjectPtr<AActor> OwnerActor;
+	UPrimitiveComponent* PrimitiveComponent;
 	
 	FVector DragPlaneOrigin;
 };

@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "DragNDropController.h"
+
+#include "DropTarget.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
@@ -71,10 +73,25 @@ void ADragNDropController::OnPointerHold()
 void ADragNDropController::OnPointerUp()
 {
 	//UE_LOG(LogKumu, Warning, TEXT("Input Released"));
-	if (bIsDragging && DraggedActor)
+	if (!bIsDragging || !DraggedActor) return;
+
+
+	FHitResult Hit;
+	if ( GetHitResultUnderCursor(ECC_WorldDynamic, true, Hit))
 	{
-		IDraggable::Execute_EndDrag(DraggedActor);
+		if (AActor* HitActor = Hit.GetActor())
+		{
+			TArray<UActorComponent*> DropTargets = HitActor->GetComponentsByInterface(UDropTarget::StaticClass());
+			if (DropTargets.Num() > 0)
+			{
+				IDropTarget::Execute_Drop(DropTargets[0], Hit.ImpactPoint);	
+			}
+			
+			UE_LOG(LogTemp, Warning, TEXT("Dropping in Actor: %s"), *HitActor->GetActorLabel());
+		}
 	}
+	
+	IDraggable::Execute_EndDrag(DraggedActor);
 	DraggedActor = nullptr;
 	bIsDragging = false;
 }

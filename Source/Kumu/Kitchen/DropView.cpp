@@ -31,4 +31,10 @@ void UDropView::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// ...
 }
 
+void UDropView::Drop_Implementation(const FVector& WorldLocation)
+{
+	UE_LOG(LogKumu, Warning, TEXT("Dropped at Location: %s"), *WorldLocation.ToString());
+	//OwnerActor->SetActorLocation(WorldLocation);
+}
+
 

@@ -19,6 +19,8 @@ void UDragView::OnRegister()
 			Root->SetMobility(EComponentMobility::Movable);
 		}
 	}
+
+	PrimitiveComponent = GetOwner()->FindComponentByClass<UPrimitiveComponent>();
 }
 
 void UDragView::OnUnregister()
@@ -44,6 +46,8 @@ void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
 	DragPlaneOrigin = WorldLocation;
 	LastDragLocation =  OwnerActor ->GetActorLocation();
 	DragOffset = LastDragLocation-WorldLocation;
+	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
+	
 }
 
 void UDragView::Drag_Implementation(const FVector& WorldLocation)
@@ -58,4 +62,5 @@ void UDragView::Drag_Implementation(const FVector& WorldLocation)
 void UDragView::EndDrag_Implementation()
 {
 	bDragging = false;
+	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 }
