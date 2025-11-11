@@ -77,7 +77,7 @@ void ADragNDropController::OnPointerUp()
 
 
 	FHitResult Hit;
-	if ( GetHitResultUnderCursor(ECC_WorldDynamic, true, Hit))
+	if ( GetHitResultUnderCursor(ECC_Camera, true, Hit))
 	{
 		if (AActor* HitActor = Hit.GetActor())
 		{

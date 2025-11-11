@@ -46,7 +46,7 @@ void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
 	DragPlaneOrigin = WorldLocation;
 	LastDragLocation =  OwnerActor ->GetActorLocation();
 	DragOffset = LastDragLocation-WorldLocation;
-	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
+	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Overlap);
 	
 }
 
@@ -62,5 +62,5 @@ void UDragView::Drag_Implementation(const FVector& WorldLocation)
 void UDragView::EndDrag_Implementation()
 {
 	bDragging = false;
-	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Block);
 }
