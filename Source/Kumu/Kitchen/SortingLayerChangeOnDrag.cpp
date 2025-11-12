@@ -29,8 +29,11 @@ void USortingLayerChangeOnDrag::BeginPlay()
 
 void USortingLayerChangeOnDrag::HandleDragBegan(FHitResult pointerEventData)
 {
+	InitialSortingLayer = SortingLayerModifier->SortingLayer;
+	SortingLayerModifier->SetSortingLayer(DraggedSortingLayer);
 }
 
 void USortingLayerChangeOnDrag::HandleDragEnd(FHitResult pointerEventData)
 {
+	SortingLayerModifier->SetSortingLayer(InitialSortingLayer);
 }
