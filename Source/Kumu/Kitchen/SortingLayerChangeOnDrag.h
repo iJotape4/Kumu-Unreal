@@ -16,8 +16,7 @@ class KUMU_API USortingLayerChangeOnDrag : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	USortingLayerChangeOnDrag();
-
-	virtual void OnRegister() override;
+	virtual void OnComponentCreated() override;
 
 protected:
 	// Called when the game starts

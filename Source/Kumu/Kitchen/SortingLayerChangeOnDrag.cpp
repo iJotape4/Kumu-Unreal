@@ -12,12 +12,11 @@ USortingLayerChangeOnDrag::USortingLayerChangeOnDrag()
 	
 }
 
-void USortingLayerChangeOnDrag::OnRegister()
+void USortingLayerChangeOnDrag::OnComponentCreated()
 {
-	Super::OnRegister();
+	Super::OnComponentCreated();
 	SETUP_REQUIRED_COMPONENT_FROM_OWNER(dragView);
 }
-
 
 // Called when the game starts
 void USortingLayerChangeOnDrag::BeginPlay()
