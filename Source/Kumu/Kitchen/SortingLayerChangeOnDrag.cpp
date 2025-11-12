@@ -12,9 +12,9 @@ USortingLayerChangeOnDrag::USortingLayerChangeOnDrag()
 	
 }
 
-void USortingLayerChangeOnDrag::OnComponentCreated()
+void USortingLayerChangeOnDrag::OnRegister()
 {
-	Super::OnComponentCreated();
+	Super::OnRegister();
 	SETUP_REQUIRED_COMPONENT_FROM_OWNER(dragView);
 	SETUP_REQUIRED_COMPONENT_FROM_OWNER(SortingLayerModifier);
 }
