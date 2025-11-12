@@ -9,7 +9,6 @@
 #include "SortingLayers/SortingLayerModifier.h"
 #include "SortingLayerChangeOnDrag.generated.h"
 
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KUMU_API USortingLayerChangeOnDrag : public UActorComponent
 {
@@ -23,6 +22,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual  void BeginDestroy() override;
 
 	UFUNCTION()
 	void HandleDragBegan(FHitResult pointerEventData);

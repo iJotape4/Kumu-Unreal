@@ -1,15 +1,8 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "SortingLayerChangeOnDrag.h"
-
+﻿#include "SortingLayerChangeOnDrag.h"
 #include "ComponentUtilsMacros.h"
 
-
-// Sets default values for this component's properties
 USortingLayerChangeOnDrag::USortingLayerChangeOnDrag()
 {
-	
 }
 
 void USortingLayerChangeOnDrag::OnRegister()
@@ -19,12 +12,18 @@ void USortingLayerChangeOnDrag::OnRegister()
 	SETUP_REQUIRED_COMPONENT_FROM_OWNER(SortingLayerModifier);
 }
 
-// Called when the game starts
 void USortingLayerChangeOnDrag::BeginPlay()
 {
 	Super::BeginPlay();
 	dragView->OnDragBegan.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragBegan);
 	dragView->OnDragEnd.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragEnd);
+}
+
+void USortingLayerChangeOnDrag::BeginDestroy()
+{
+	Super::BeginDestroy();
+	dragView->OnDragBegan.RemoveAll(this);
+	dragView->OnDragEnd.RemoveAll(this);
 }
 
 void USortingLayerChangeOnDrag::HandleDragBegan(FHitResult pointerEventData)
