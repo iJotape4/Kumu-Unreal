@@ -3,6 +3,7 @@
 
 #include "SortingLayerChangeOnDrag.h"
 
+#include "ComponentUtilsMacros.h"
 
 
 // Sets default values for this component's properties
@@ -11,12 +12,11 @@ USortingLayerChangeOnDrag::USortingLayerChangeOnDrag()
 	
 }
 
-void USortingLayerChangeOnDrag::OnRegister()
+void USortingLayerChangeOnDrag::OnComponentCreated()
 {
-	Super::OnRegister();
-	ComponentUtils::SetUpRequiredComponent<UDragView>(GetOwner(), dragView);
+	Super::OnComponentCreated();
+	SETUP_REQUIRED_COMPONENT_FROM_OWNER(dragView);
 }
-
 
 // Called when the game starts
 void USortingLayerChangeOnDrag::BeginPlay()
