@@ -3,10 +3,66 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ComponentUtils.h"
+#include "GameFramework/Actor.h"
+#include "Components/SceneComponent.h"
 #include <type_traits>
 
 // -----------------------------------------------------------------------------
+// Header-only template implementation
+// This is the small utility that searches the Owner for a component of type T,
+// and if missing creates it, registers it, and attaches it when it's a USceneComponent.
+// -----------------------------------------------------------------------------
+namespace ComponentUtilsMacros
+{
+    template <class T>
+    inline void SetUpRequiredComponent(AActor* Owner, T*& RequiredComponent)
+    {
+        if (!Owner)
+        {
+            return;
+        }
+
+        if (T* Found = Owner->FindComponentByClass<T>())
+        {
+            RequiredComponent = Found;
+            UE_LOG(LogTemp, Verbose, TEXT("ComponentUtilsMacros: found existing component %s on actor %s"), *T::StaticClass()->GetName(), *Owner->GetName());
+            return;
+        }
+
+        // Create the component with the actor as the outer so it gets GC with the actor.
+        FName BaseName = T::StaticClass()->GetFName();
+        T* NewComp = NewObject<T>(Owner, T::StaticClass(), BaseName, RF_Transactional);
+        if (!NewComp)
+        {
+            UE_LOG(LogTemp, Error, TEXT("ComponentUtilsMacros: failed to create component %s for actor %s"), *T::StaticClass()->GetName(), *Owner->GetName());
+            return;
+        }
+
+        Owner->AddInstanceComponent(NewComp);
+        NewComp->RegisterComponent();
+
+        if (USceneComponent* SceneComp = Cast<USceneComponent>(NewComp))
+        {
+            if (USceneComponent* RootComp = Owner->GetRootComponent())
+            {
+                SceneComp->AttachToComponent(RootComp, FAttachmentTransformRules::KeepRelativeTransform);
+            }
+            else
+            {
+                Owner->SetRootComponent(SceneComp);
+            }
+        }
+
+        RequiredComponent = NewComp;
+        UE_LOG(LogTemp, Verbose, TEXT("ComponentUtilsMacros: created and attached component %s on actor %s"), *T::StaticClass()->GetName(), *Owner->GetName());
+    }
+} // namespace ComponentUtilsHeader
+
+// -----------------------------------------------------------------------------
+// Macros that call the header-only helper. They infer the component type from
+// the Member pointer (decltype(Member) must be a raw pointer type, e.g. UMyComp*).
+// -----------------------------------------------------------------------------
+
 // Primary macro (type inferred from Member pointer)
 // Usage:
 //   // header
@@ -26,7 +82,7 @@
 // - Prefer calling in BeginPlay/OnRegister/InitializeComponent — after actor and root component exist.
 // -----------------------------------------------------------------------------
 #define SETUP_REQUIRED_COMPONENT(OwnerPtr, Member) \
-    ComponentUtils::SetUpRequiredComponent<typename std::remove_pointer<decltype(Member)>::type>(OwnerPtr, Member)
+    ComponentUtilsMacros::SetUpRequiredComponent<typename std::remove_pointer<decltype(Member)>::type>(OwnerPtr, Member)
 
 // Convenience: use `this` as the owner. Good for AActor-derived classes.
 // Example: SETUP_REQUIRED_COMPONENT_SELF(DragView);

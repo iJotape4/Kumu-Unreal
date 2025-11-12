@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "DragView.h"
-#include "ComponentUtils.h"
 #include "Components/ActorComponent.h"
 #include "SortingLayerChangeOnDrag.generated.h"
 
