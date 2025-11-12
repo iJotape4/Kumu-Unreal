@@ -13,13 +13,13 @@ ADragNDropController::ADragNDropController()
 {
 }
 
-bool ADragNDropController::GetCursorWorldProjection(FVector& OutWorldLocation) const
+bool ADragNDropController::GetCursorWorldProjection(FHitResult& pointerEventData) const
 {
 	FHitResult Hit;
 	if ( !GetHitResultUnderCursor(ECC_Visibility, true, Hit))
 		return false;
 	
-	OutWorldLocation = Hit.ImpactPoint;
+	pointerEventData = Hit;
 	return true;
 }
 
@@ -53,7 +53,7 @@ void ADragNDropController::OnPointerDown()
 		{
 			DraggedActor = DraggableComps[0];
 			bIsDragging = true;
-			IDraggable::Execute_BeginDrag(DraggedActor, Hit.ImpactPoint);
+			IDraggable::Execute_BeginDrag(DraggedActor, Hit);
 		}
 	}
 }
@@ -62,11 +62,10 @@ void ADragNDropController::OnPointerHold()
 {
 	if (!bIsDragging || !DraggedActor) return;
 
-	FVector WorldPos;
-	
-	if (GetCursorWorldProjection(WorldPos))
+	FHitResult eventData;
+	if (GetCursorWorldProjection(eventData))
 	{
-		IDraggable::Execute_Drag(DraggedActor, WorldPos);
+		IDraggable::Execute_Drag(DraggedActor, eventData);
 	}
 }
 
@@ -91,7 +90,7 @@ void ADragNDropController::OnPointerUp()
 		}
 	}
 	
-	IDraggable::Execute_EndDrag(DraggedActor);
+	IDraggable::Execute_EndDrag(DraggedActor, Hit);
 	DraggedActor = nullptr;
 	bIsDragging = false;
 }

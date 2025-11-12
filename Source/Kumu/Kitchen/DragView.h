@@ -22,10 +22,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	virtual void BeginDrag_Implementation(const FVector& WorldLocation) override;
-	virtual void Drag_Implementation(const FVector& WorldLocation) override;
-	virtual void EndDrag_Implementation() override;
-
+	virtual void BeginDrag_Implementation(const FHitResult &pointerEventData) override;
+	virtual void Drag_Implementation(const FHitResult &pointerEventData) override;
+	virtual void EndDrag_Implementation(const FHitResult &pointerEventData) override;
 private:
 	bool bDragging;
 	FVector DragOffset;

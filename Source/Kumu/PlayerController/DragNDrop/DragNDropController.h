@@ -32,7 +32,7 @@ private:
 	// FVector DragPlaneNormal;
 	// FVector LastDragWorldLocation;
 	bool bIsDragging;
-	bool GetCursorWorldProjection(FVector& OutWorldLocation) const;
+	bool GetCursorWorldProjection(FHitResult& pointerEventData) const;
 
 protected:
 

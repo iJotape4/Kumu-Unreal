@@ -22,13 +22,13 @@ class KUMU_API IDraggable
 	
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drag")
-	void BeginDrag(const FVector &WorldLocation);
+	void BeginDrag(const FHitResult &pointerEventData);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drag")
-	void Drag(const FVector &WorldLocation);
+	void Drag(const FHitResult &pointerEventData);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drag")
-	void EndDrag();
+	void EndDrag(const FHitResult &pointerEventData);
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 };

@@ -39,10 +39,11 @@ void UDragView::BeginPlay()
 	bDragging = false;
 }
 
-void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
+void UDragView::BeginDrag_Implementation(const FHitResult &pointerEventData)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Begin Drag at Location: %s"), *WorldLocation.ToString());
 	bDragging = true;
+	FVector WorldLocation = pointerEventData.ImpactPoint;
 	DragPlaneOrigin = WorldLocation;
 	LastDragLocation =  OwnerActor ->GetActorLocation();
 	DragOffset = LastDragLocation-WorldLocation;
@@ -50,16 +51,16 @@ void UDragView::BeginDrag_Implementation(const FVector& WorldLocation)
 	
 }
 
-void UDragView::Drag_Implementation(const FVector& WorldLocation)
+void UDragView::Drag_Implementation(const FHitResult &pointerEventData)
 {
 	if (!bDragging) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Dragging to Location: %s"), *WorldLocation.ToString());
-
+	FVector WorldLocation = pointerEventData.ImpactPoint;
 	const FVector NewLocation = FVector(WorldLocation.X, DragPlaneOrigin.Y, WorldLocation.Z) + DragOffset;
 	OwnerActor->SetActorLocation(NewLocation);
 }
 
-void UDragView::EndDrag_Implementation()
+void UDragView::EndDrag_Implementation(const FHitResult &pointerEventData)
 {
 	bDragging = false;
 	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Block);
