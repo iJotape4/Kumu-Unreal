@@ -16,24 +16,21 @@ void USortingLayerChangeOnDrag::OnComponentCreated()
 {
 	Super::OnComponentCreated();
 	SETUP_REQUIRED_COMPONENT_FROM_OWNER(dragView);
+	SETUP_REQUIRED_COMPONENT_FROM_OWNER(SortingLayerModifier);
 }
 
 // Called when the game starts
 void USortingLayerChangeOnDrag::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	dragView->OnDragBegan.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragBegan);
+	dragView->OnDragEnd.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragEnd);
 }
 
-
-// Called every frame
-void USortingLayerChangeOnDrag::TickComponent(float DeltaTime, ELevelTick TickType,
-                                              FActorComponentTickFunction* ThisTickFunction)
+void USortingLayerChangeOnDrag::HandleDragBegan(FHitResult pointerEventData)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
+void USortingLayerChangeOnDrag::HandleDragEnd(FHitResult pointerEventData)
+{
+}

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "DragView.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
+#include "SortingLayers/SortingLayerModifier.h"
 #include "SortingLayerChangeOnDrag.generated.h"
 
 
@@ -22,12 +24,23 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION()
+	void HandleDragBegan(FHitResult pointerEventData);
+
+	UFUNCTION()
+	void HandleDragEnd(FHitResult pointerEventData);
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UDragView* dragView;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USortingLayerModifier* SortingLayerModifier;
+
+protected:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	FGameplayTag InitialSortingLayer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	FGameplayTag DraggedSortingLayer=FGameplayTag::RequestGameplayTag(FName("SortingLayers.7_Dragged"));
 };

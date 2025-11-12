@@ -22,7 +22,11 @@ public:
 	virtual void OnRegister() override;
 
 	int GetTagLocalIndex(FGameplayTag Tag);
-
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sorting Layer" , meta = (Categories = "SortingLayers", BlueprintSetter="SetSortingLayer"))
+	FGameplayTag SortingLayer;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -30,13 +34,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sorting Layer")
 	UDataTable* SortingLayersAsset;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sorting Layer" , meta = (Categories = "SortingLayers", BlueprintSetter="SetSortingLayer"))
-	FGameplayTag SortingLayer;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPaperSpriteComponent* Sprite;
 
-protected:
+public:
 	UFUNCTION(BlueprintSetter)
 	void SetSortingLayer(FGameplayTag NewSortingLayer);
 	

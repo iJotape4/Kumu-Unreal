@@ -41,6 +41,7 @@ void UDragView::BeginPlay()
 
 void UDragView::BeginDrag_Implementation(const FHitResult &pointerEventData)
 {
+	OnDragBegan.Broadcast(pointerEventData);
 	//UE_LOG(LogTemp, Warning, TEXT("Begin Drag at Location: %s"), *WorldLocation.ToString());
 	bDragging = true;
 	FVector WorldLocation = pointerEventData.ImpactPoint;
@@ -62,6 +63,7 @@ void UDragView::Drag_Implementation(const FHitResult &pointerEventData)
 
 void UDragView::EndDrag_Implementation(const FHitResult &pointerEventData)
 {
+	OnDragEnd.Broadcast(pointerEventData);
 	bDragging = false;
 	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Block);
 }
