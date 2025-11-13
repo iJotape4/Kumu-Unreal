@@ -15,6 +15,8 @@ void USortingLayerChangeOnDrag::OnRegister()
 void USortingLayerChangeOnDrag::BeginPlay()
 {
 	Super::BeginPlay();
+	if (!dragView) return;
+	
 	dragView->OnDragBegan.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragBegan);
 	dragView->OnDragEnd.AddDynamic(this, &USortingLayerChangeOnDrag::HandleDragEnd);
 }
@@ -22,6 +24,8 @@ void USortingLayerChangeOnDrag::BeginPlay()
 void USortingLayerChangeOnDrag::BeginDestroy()
 {
 	Super::BeginDestroy();
+	if (!dragView) return;
+	
 	dragView->OnDragBegan.RemoveAll(this);
 	dragView->OnDragEnd.RemoveAll(this);
 }
