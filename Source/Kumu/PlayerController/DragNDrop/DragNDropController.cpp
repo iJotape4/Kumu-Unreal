@@ -16,7 +16,14 @@ FHitResult ADragNDropController::GetCursorWorldProjection(ECollisionChannel chan
 {
 	FHitResult Hit;
 	// Fill Hit via engine helper; if nothing was hit, Hit.bBlockingHit will be false
+#if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
 	GetHitResultUnderCursor(channel, true, Hit);
+#endif
+	
+#if PLATFORM_ANDROID || PLATFORM_IOS
+	GetHitResultUnderFinger(ETouchIndex::Touch1, channel, true, Hit);
+#endif
+	
 	return Hit;
 }
 
@@ -41,24 +48,17 @@ void ADragNDropController::SetupInputComponent()
 void ADragNDropController::OnPointerDown()
 {
 	//UE_LOG(LogKumu, Warning, TEXT("Input Started"));
-	FHitResult Hit;
-	// compute hit in a single expression to avoid reassignment warnings
-	bool bHitSuccessful = bIsTouch
-		? GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit)
-		: GetHitResultUnderCursor(ECC_Visibility, true, Hit);
-
-	if (!bHitSuccessful)
+	FHitResult eventdata = GetCursorWorldProjection();
+	if (!eventdata.bBlockingHit)
 		return;
 	
-	AActor* HitActor = Hit.GetActor();
-	///UE_LOG( LogKumu, Warning, TEXT("Hit actor : %s"), *HitActor->GetClass()->GetName())
-	if (HitActor)
+	if (AActor* HitActor = eventdata.GetActor())
 	{
 		if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDraggable::StaticClass(), HitActor))
 		{
 			DraggedActor = ActorComponent;
 			bIsDragging = true;
-			IDraggable::Execute_BeginDrag(DraggedActor.Get(), Hit);
+			IDraggable::Execute_BeginDrag(DraggedActor.Get(), eventdata);
 		}
 	}
 }
@@ -102,12 +102,10 @@ void ADragNDropController::OnPointerUp()
 // Triggered every frame when the input is held down
 void ADragNDropController::OnTouchTriggered()
 {
-	bIsTouch = true;
 	OnPointerHold();
 }
 
 void ADragNDropController::OnTouchReleased()
 {
-	bIsTouch = false;
 	OnPointerUp();
 }

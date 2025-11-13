@@ -38,9 +38,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* PrimaryTouchAction;
 
-	/** Set to true if we're using touch input */
-	uint32 bIsTouch : 1;
-
 protected:
 	virtual void SetupInputComponent() override;
 

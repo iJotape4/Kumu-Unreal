@@ -8,11 +8,18 @@
 
 APointerPlayerController::APointerPlayerController()
 {
-	bIsTouch = false;
-
+#if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
 	// configure the controller
 	bShowMouseCursor = true;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
 	DefaultMouseCursor = EMouseCursor::Default;
+#endif
+
+#if PLATFORM_ANDROID || PLATFORM_IOS
+	bEnableTouchEvents = true;
+	bEnableTouchOverEvents = true;
+#endif
 }
 
 void APointerPlayerController::SetupInputComponent()
