@@ -88,7 +88,7 @@ void ADragNDropController::OnPointerUp()
 		{
 			if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDropTarget::StaticClass(), HitActor))
 			{
-				IDropTarget::Execute_Drop(ActorComponent, Hit.ImpactPoint);
+				IDropTarget::Execute_Drop(ActorComponent, Hit);
 				UE_LOG(LogTemp, Warning, TEXT("Dropping in Actor: %s"), *HitActor->GetActorLabel());
 			}
 		}

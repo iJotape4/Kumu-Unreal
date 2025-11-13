@@ -21,7 +21,7 @@ class KUMU_API IDropTarget
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Drop")
-	void Drop(const FVector &WorldLocation);
+	void Drop(const FHitResult eventData);
 	
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.

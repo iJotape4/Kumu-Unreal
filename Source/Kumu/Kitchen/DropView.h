@@ -7,6 +7,10 @@
 #include "PlayerController/DragNDrop/DropTarget.h"
 #include "DropView.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerEntered, FHitResult, eventData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerExited, FHitResult, eventData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDropped, FHitResult, eventData);
+
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KUMU_API UDropView : public UActorComponent, public IDropTarget
@@ -25,7 +29,16 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void Drop_Implementation(const FVector& WorldLocation) override;
+	virtual void Drop_Implementation(const FHitResult eventData) override;
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnPointerEntered OnPointerEntered;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnPointerExited OnPointerExited;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnDropped OnDropped;
 private:
 	TObjectPtr<AActor> OwnerActor;
 };
