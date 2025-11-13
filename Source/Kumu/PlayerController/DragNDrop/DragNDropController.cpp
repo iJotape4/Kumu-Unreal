@@ -13,14 +13,26 @@ ADragNDropController::ADragNDropController()
 {
 }
 
-bool ADragNDropController::GetCursorWorldProjection(FHitResult& pointerEventData) const
+bool ADragNDropController::GetCursorWorldProjection(FHitResult& pointerEventData, ECollisionChannel channel) const
 {
 	FHitResult Hit;
-	if ( !GetHitResultUnderCursor(ECC_Visibility, true, Hit))
+	if ( !GetHitResultUnderCursor(channel, true, Hit))
 		return false;
 	
 	pointerEventData = Hit;
 	return true;
+}
+
+UActorComponent* ADragNDropController::CheckActorUnderPointerImplementsInterface(TSubclassOf<UInterface> InterfaceClass,
+	AActor*& OutActor) const
+{
+	TArray<UActorComponent*> DraggableComps = OutActor->GetComponentsByInterface(InterfaceClass);
+	if (DraggableComps.Num() > 0)
+	{
+		return DraggableComps[0];
+	}
+	
+	return  nullptr;
 }
 
 void ADragNDropController::SetupInputComponent()
@@ -48,10 +60,9 @@ void ADragNDropController::OnPointerDown()
 	///UE_LOG( LogKumu, Warning, TEXT("Hit actor : %s"), *HitActor->GetClass()->GetName())
 	if (HitActor)
 	{
-		TArray<UActorComponent*> DraggableComps = HitActor->GetComponentsByInterface(UDraggable::StaticClass());
-		if (DraggableComps.Num() > 0)
+		if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDraggable::StaticClass(), HitActor))
 		{
-			DraggedActor = DraggableComps[0];
+			DraggedActor = ActorComponent;
 			bIsDragging = true;
 			IDraggable::Execute_BeginDrag(DraggedActor, Hit);
 		}
@@ -74,19 +85,17 @@ void ADragNDropController::OnPointerUp()
 	//UE_LOG(LogKumu, Warning, TEXT("Input Released"));
 	if (!bIsDragging || !DraggedActor) return;
 
-
+	
 	FHitResult Hit;
-	if ( GetHitResultUnderCursor(ECC_Camera, true, Hit))
+	if (GetCursorWorldProjection(Hit, ECC_Camera))
 	{
 		if (AActor* HitActor = Hit.GetActor())
 		{
-			TArray<UActorComponent*> DropTargets = HitActor->GetComponentsByInterface(UDropTarget::StaticClass());
-			if (DropTargets.Num() > 0)
+			if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDropTarget::StaticClass(), HitActor))
 			{
-				IDropTarget::Execute_Drop(DropTargets[0], Hit.ImpactPoint);	
+				IDropTarget::Execute_Drop(ActorComponent, Hit.ImpactPoint);
+				UE_LOG(LogTemp, Warning, TEXT("Dropping in Actor: %s"), *HitActor->GetActorLabel());
 			}
-			
-			UE_LOG(LogTemp, Warning, TEXT("Dropping in Actor: %s"), *HitActor->GetActorLabel());
 		}
 	}
 	
