@@ -41,6 +41,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	FGameplayTag InitialSortingLayer;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 	FGameplayTag DraggedSortingLayer=FGameplayTag::RequestGameplayTag(FName("SortingLayers.7_Dragged"));
 };
