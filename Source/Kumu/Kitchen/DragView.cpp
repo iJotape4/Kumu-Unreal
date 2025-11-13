@@ -65,5 +65,6 @@ void UDragView::EndDrag_Implementation(const FHitResult &pointerEventData)
 {
 	OnDragEnd.Broadcast(pointerEventData);
 	bDragging = false;
+	OwnerActor->SetActorLocation(LastDragLocation);
 	PrimitiveComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Block);
 }
