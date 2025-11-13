@@ -32,7 +32,7 @@ int USortingLayerModifier::GetTagLocalIndex(FGameplayTag Tag)
 	SortingLayersAsset->GetAllRows<FGameplayTagTableRow>(TEXT("GetTagLocalIndex"), Rows);
 	for (int32 Index = 0; Index < Rows.Num(); Index++)
 	{
-		UE_LOG(LogKumu, Warning, TEXT("Row Name %s"), *Rows[Index]->Tag.ToString());
+		//UE_LOG(LogKumu, Warning, TEXT("Row Name %s"), *Rows[Index]->Tag.ToString());
 		if (Rows[Index]->Tag == Tag.GetTagName())
 			return Index;
 	}
@@ -59,7 +59,7 @@ void USortingLayerModifier::ChangeSortingLayer(FGameplayTag NewSortingLayer)
 	SortingLayer = NewSortingLayer;
 	int number = GetTagLocalIndex(NewSortingLayer);
 	Sprite->TranslucencySortPriority = number;
-	UE_LOG(LogKumu, Warning, TEXT("Changed Sorting Layer to %s with priority %d"), *SortingLayer.GetTagLeafName().ToString(), number);
+	//UE_LOG(LogKumu, Warning, TEXT("Changed Sorting Layer to %s with priority %d"), *SortingLayer.GetTagLeafName().ToString(), number);
 
 	// Make sure render state updates so changes are visible immediately in-game
 	Sprite->MarkRenderStateDirty();
@@ -68,13 +68,13 @@ void USortingLayerModifier::ChangeSortingLayer(FGameplayTag NewSortingLayer)
 #if WITH_EDITOR
 void USortingLayerModifier::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	UE_LOG(LogKumu, Warning, TEXT("PostEditChangeProperty"));
+	//UE_LOG(LogKumu, Warning, TEXT("PostEditChangeProperty"));
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
 	const FName PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
 	if (PropertyName == GET_MEMBER_NAME_CHECKED(USortingLayerModifier, SortingLayer))
 	{
-		UE_LOG(LogKumu, Warning, TEXT("Sorting Layer Changed"));
+		//UE_LOG(LogKumu, Warning, TEXT("Sorting Layer Changed"));
 		ChangeSortingLayer(SortingLayer);
 	}
 }
