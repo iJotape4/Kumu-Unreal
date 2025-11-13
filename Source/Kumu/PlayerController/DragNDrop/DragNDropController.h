@@ -27,12 +27,14 @@ public:
 	/** Constructor */
 	ADragNDropController();
 private:
-	UActorComponent* DraggedActor;
+	UPROPERTY(Transient)
+	TWeakObjectPtr<UActorComponent> DraggedActor;
 	// FVector DragPlaneOrigin;
 	// FVector DragPlaneNormal;
 	// FVector LastDragWorldLocation;
 	bool bIsDragging;
-	bool GetCursorWorldProjection(FHitResult& pointerEventData, ECollisionChannel channel = ECC_Visibility) const;
+	// Refactor: return FHitResult directly instead of using an out parameter + bool
+	FHitResult GetCursorWorldProjection(ECollisionChannel channel = ECC_Visibility) const;
 	UActorComponent* CheckActorUnderPointerImplementsInterface(TSubclassOf<UInterface> InterfaceClass, AActor*& OutActor) const;
 
 protected:

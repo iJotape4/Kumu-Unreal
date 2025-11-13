@@ -6,21 +6,18 @@
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
-#include "Kumu.h"
 #include "PlayerController/DragNDrop/UDraggable.h"
 
 ADragNDropController::ADragNDropController()
 {
 }
 
-bool ADragNDropController::GetCursorWorldProjection(FHitResult& pointerEventData, ECollisionChannel channel) const
+FHitResult ADragNDropController::GetCursorWorldProjection(ECollisionChannel channel) const
 {
 	FHitResult Hit;
-	if ( !GetHitResultUnderCursor(channel, true, Hit))
-		return false;
-	
-	pointerEventData = Hit;
-	return true;
+	// Fill Hit via engine helper; if nothing was hit, Hit.bBlockingHit will be false
+	GetHitResultUnderCursor(channel, true, Hit);
+	return Hit;
 }
 
 UActorComponent* ADragNDropController::CheckActorUnderPointerImplementsInterface(TSubclassOf<UInterface> InterfaceClass,
@@ -45,13 +42,10 @@ void ADragNDropController::OnPointerDown()
 {
 	//UE_LOG(LogKumu, Warning, TEXT("Input Started"));
 	FHitResult Hit;
-	bool bHitSuccessful = false;
-	
-	if (bIsTouch)
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	else
-		bHitSuccessful = GetHitResultUnderCursor(ECC_Visibility, true, Hit);
-	
+	// compute hit in a single expression to avoid reassignment warnings
+	bool bHitSuccessful = bIsTouch
+		? GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit)
+		: GetHitResultUnderCursor(ECC_Visibility, true, Hit);
 
 	if (!bHitSuccessful)
 		return;
@@ -64,30 +58,31 @@ void ADragNDropController::OnPointerDown()
 		{
 			DraggedActor = ActorComponent;
 			bIsDragging = true;
-			IDraggable::Execute_BeginDrag(DraggedActor, Hit);
+			IDraggable::Execute_BeginDrag(DraggedActor.Get(), Hit);
 		}
 	}
 }
 
 void ADragNDropController::OnPointerHold()
 {
-	if (!bIsDragging || !DraggedActor) return;
+	if (!bIsDragging || !DraggedActor.IsValid()) return;
 
-	FHitResult eventData;
-	if (GetCursorWorldProjection(eventData))
+	// Get the current cursor world projection as an FHitResult
+	FHitResult eventData = GetCursorWorldProjection();
+	if (eventData.bBlockingHit)
 	{
-		IDraggable::Execute_Drag(DraggedActor, eventData);
+		IDraggable::Execute_Drag(DraggedActor.Get(), eventData);
 	}
 }
 
 void ADragNDropController::OnPointerUp()
 {
 	//UE_LOG(LogKumu, Warning, TEXT("Input Released"));
-	if (!bIsDragging || !DraggedActor) return;
+	if (!bIsDragging || !DraggedActor.IsValid()) return;
 
-	
-	FHitResult Hit;
-	if (GetCursorWorldProjection(Hit, ECC_Camera))
+	// Get the hit using the camera collision channel
+	FHitResult Hit = GetCursorWorldProjection(ECC_Camera);
+	if (Hit.bBlockingHit)
 	{
 		if (AActor* HitActor = Hit.GetActor())
 		{
@@ -99,7 +94,7 @@ void ADragNDropController::OnPointerUp()
 		}
 	}
 	
-	IDraggable::Execute_EndDrag(DraggedActor, Hit);
+	IDraggable::Execute_EndDrag(DraggedActor.Get(), Hit);
 	DraggedActor = nullptr;
 	bIsDragging = false;
 }
