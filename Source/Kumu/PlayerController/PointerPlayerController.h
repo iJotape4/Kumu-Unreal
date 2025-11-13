@@ -45,6 +45,4 @@ protected:
 	virtual void OnPointerDown() PURE_VIRTUAL(APointerPlayerController::OnPointerDown, );
 	virtual void OnPointerHold() PURE_VIRTUAL(APointerPlayerController::OnPointerHold, );
 	virtual void OnPointerUp() PURE_VIRTUAL(APointerPlayerController::OnPointerUp, );
-	virtual void OnTouchTriggered() PURE_VIRTUAL(APointerPlayerController::OnTouchTriggered, );
-	virtual void OnTouchReleased() PURE_VIRTUAL(APointerPlayerController::OnTouchReleased, );
 };

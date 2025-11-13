@@ -46,7 +46,4 @@ protected:
 	virtual void OnPointerDown() override;
 	virtual void OnPointerHold() override;
 	virtual void OnPointerUp() override;
-	virtual void OnTouchTriggered() override;
-	virtual void OnTouchReleased() override;
-
 };

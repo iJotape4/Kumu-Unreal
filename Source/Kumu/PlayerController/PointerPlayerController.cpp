@@ -45,9 +45,9 @@ void APointerPlayerController::SetupInputComponent()
 
 			// Setup touch input events
 			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Started, this, &APointerPlayerController::OnPointerDown);
-			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnTouchTriggered);
-			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnTouchReleased);
-			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnTouchReleased);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Triggered, this, &APointerPlayerController::OnPointerHold);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Completed, this, &APointerPlayerController::OnPointerUp);
+			EnhancedInputComponent->BindAction(PrimaryTouchAction, ETriggerEvent::Canceled, this, &APointerPlayerController::OnPointerUp);
 		}
 		else
 		{

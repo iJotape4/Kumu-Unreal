@@ -98,14 +98,3 @@ void ADragNDropController::OnPointerUp()
 	DraggedActor = nullptr;
 	bIsDragging = false;
 }
-
-// Triggered every frame when the input is held down
-void ADragNDropController::OnTouchTriggered()
-{
-	OnPointerHold();
-}
-
-void ADragNDropController::OnTouchReleased()
-{
-	OnPointerUp();
-}
