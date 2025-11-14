@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MaterialPropertyHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Kumu/PlayerController/DragNDrop/UDraggable.h"
 #include "DragView.generated.h"
@@ -23,7 +22,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
+	void SetCollisionResponsesForDragging(bool enable) const;
+
 	virtual void BeginDrag_Implementation(const FHitResult &pointerEventData) override;
 	virtual void Drag_Implementation(const FHitResult &pointerEventData) override;
 	virtual void EndDrag_Implementation(const FHitResult &pointerEventData) override;

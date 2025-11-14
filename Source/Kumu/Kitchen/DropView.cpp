@@ -12,23 +12,26 @@ UDropView::UDropView()
 	OwnerActor = GetOwner();
 }
 
-
-// Called when the game starts
 void UDropView::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 	
 }
 
-
-// Called every frame
-void UDropView::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UDropView::OnRegister()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::OnRegister();
 
-	// ...
+	/*
+	 Drop targets must block all channels in order to work properly
+	 */
+	PrimitiveComponent = GetOwner()->FindComponentByClass<UPrimitiveComponent>();
+	
+	if (PrimitiveComponent)
+	{
+		PrimitiveComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
+		PrimitiveComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	}
 }
 
 void UDropView::Drop_Implementation(const FHitResult eventData)
