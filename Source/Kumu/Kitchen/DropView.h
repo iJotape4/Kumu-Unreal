@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PlayerController/DragNDrop/DragNDropController.h"
 #include "PlayerController/DragNDrop/DropTarget.h"
+#include "PlayerController/DragNDrop/Hoverable.h"
 #include "DropView.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerEntered, FHitResult, eventData);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerExited, FHitResult, eventData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDropped, FHitResult, eventData);
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class KUMU_API UDropView : public UActorComponent, public IDropTarget
+class KUMU_API UDropView : public UActorComponent, public IDropTarget, public IHoverable
 {
 	GENERATED_BODY()
 
@@ -22,20 +22,23 @@ public:
 	UDropView();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	virtual void Drop_Implementation(const FHitResult eventData) override;
-public:
-	UPROPERTY(BlueprintAssignable)
-	FOnPointerEntered OnPointerEntered;
 	virtual  void OnRegister() override;
 	
-	UPROPERTY(BlueprintAssignable)
-	FOnPointerExited OnPointerExited;
+	virtual void Drop_Implementation(const FHitResult eventData) override;
+
+	virtual void HandleBeginCursorOver_Implementation(UPrimitiveComponent* touchedComponent) override;
 	
+	virtual void HandleEndCursorOver_Implementation(UPrimitiveComponent* touchedComponent) override;
+
+public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDropped OnDropped;
 private:
 	TObjectPtr<AActor> OwnerActor;
+	UPrimitiveComponent* PrimitiveComponent;
+	
+	UPROPERTY(Transient)
+	ADragNDropController* CachedPlayerController;
 };

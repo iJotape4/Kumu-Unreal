@@ -37,6 +37,9 @@ private:
 	FHitResult GetCursorWorldProjection(ECollisionChannel channel = ECC_Visibility) const;
 	UActorComponent* CheckActorUnderPointerImplementsInterface(TSubclassOf<UInterface> InterfaceClass, AActor*& OutActor) const;
 
+public:
+	TWeakObjectPtr<UActorComponent> GetDraggedActor() const { return DraggedActor; }
+	bool IsDragging() const { return bIsDragging; }
 protected:
 
 	/** Initialize input bindings */

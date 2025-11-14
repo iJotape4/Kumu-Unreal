@@ -48,17 +48,17 @@ void ADragNDropController::SetupInputComponent()
 void ADragNDropController::OnPointerDown()
 {
 	//UE_LOG(LogKumu, Warning, TEXT("Input Started"));
-	FHitResult eventdata = GetCursorWorldProjection();
-	if (!eventdata.bBlockingHit)
+	FHitResult PointerEventData = GetCursorWorldProjection();
+	if (!PointerEventData.bBlockingHit)
 		return;
 	
-	if (AActor* HitActor = eventdata.GetActor())
+	if (AActor* HitActor = PointerEventData.GetActor())
 	{
 		if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDraggable::StaticClass(), HitActor))
 		{
 			DraggedActor = ActorComponent;
 			bIsDragging = true;
-			IDraggable::Execute_BeginDrag(DraggedActor.Get(), eventdata);
+			IDraggable::Execute_BeginDrag(DraggedActor.Get(), PointerEventData);
 		}
 	}
 }
@@ -68,10 +68,10 @@ void ADragNDropController::OnPointerHold()
 	if (!bIsDragging || !DraggedActor.IsValid()) return;
 
 	// Get the current cursor world projection as an FHitResult
-	FHitResult eventData = GetCursorWorldProjection();
-	if (eventData.bBlockingHit)
+	FHitResult PointerEventData = GetCursorWorldProjection();
+	if (PointerEventData.bBlockingHit)
 	{
-		IDraggable::Execute_Drag(DraggedActor.Get(), eventData);
+		IDraggable::Execute_Drag(DraggedActor.Get(), PointerEventData);
 	}
 }
 
@@ -81,20 +81,20 @@ void ADragNDropController::OnPointerUp()
 	if (!bIsDragging || !DraggedActor.IsValid()) return;
 
 	// Get the hit using the camera collision channel
-	FHitResult Hit = GetCursorWorldProjection(ECC_Camera);
-	if (Hit.bBlockingHit)
+	FHitResult PointerEventData = GetCursorWorldProjection(ECC_Camera);
+	if (PointerEventData.bBlockingHit)
 	{
-		if (AActor* HitActor = Hit.GetActor())
+		if (AActor* HitActor = PointerEventData.GetActor())
 		{
 			if (UActorComponent* ActorComponent = CheckActorUnderPointerImplementsInterface(UDropTarget::StaticClass(), HitActor))
 			{
-				IDropTarget::Execute_Drop(ActorComponent, Hit);
+				IDropTarget::Execute_Drop(ActorComponent, PointerEventData);
 				UE_LOG(LogTemp, Warning, TEXT("Dropping in Actor: %s"), *HitActor->GetActorLabel());
 			}
 		}
 	}
 	
-	IDraggable::Execute_EndDrag(DraggedActor.Get(), Hit);
+	IDraggable::Execute_EndDrag(DraggedActor.Get(), PointerEventData);
 	DraggedActor = nullptr;
 	bIsDragging = false;
 }

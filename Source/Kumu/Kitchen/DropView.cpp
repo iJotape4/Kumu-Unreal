@@ -16,6 +16,15 @@ void UDropView::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	CachedPlayerController = Cast<ADragNDropController>(GetWorld()->GetFirstPlayerController());
+	
+	if (PrimitiveComponent)
+	{
+#if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
+		PrimitiveComponent->OnBeginCursorOver.AddDynamic(this, &UDropView::HandleBeginCursorOver);
+		PrimitiveComponent->OnEndCursorOver.AddDynamic(this, &UDropView::HandleEndCursorOver);
+#endif
+	}
 }
 
 void UDropView::OnRegister()
@@ -39,4 +48,22 @@ void UDropView::Drop_Implementation(const FHitResult eventData)
 	OnDropped.Broadcast(eventData);
 }
 
+void UDropView::HandleBeginCursorOver_Implementation(UPrimitiveComponent* touchedComponent)
+{
+	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
 
+	if (UActorComponent* draggedActor =  CachedPlayerController->GetDraggedActor().Get())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Begin Cursor Over"));
+	}
+}
+
+void UDropView::HandleEndCursorOver_Implementation(UPrimitiveComponent* touchedComponent)
+{
+	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
+
+	if (UActorComponent* draggedActor =  CachedPlayerController->GetDraggedActor().Get())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("End Cursor Over"));
+	}
+}
