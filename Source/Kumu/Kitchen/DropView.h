@@ -25,14 +25,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void Drop_Implementation(const FHitResult eventData) override;
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPointerEntered OnPointerEntered;
+	virtual  void OnRegister() override;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnPointerExited OnPointerExited;
