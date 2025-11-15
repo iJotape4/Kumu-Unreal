@@ -20,10 +20,8 @@ void UDropView::BeginPlay()
 	
 	if (PrimitiveComponent)
 	{
-#if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
 		PrimitiveComponent->OnBeginCursorOver.AddDynamic(this, &UDropView::HandleBeginCursorOver);
 		PrimitiveComponent->OnEndCursorOver.AddDynamic(this, &UDropView::HandleEndCursorOver);
-#endif
 	}
 }
 
@@ -48,7 +46,7 @@ void UDropView::Drop_Implementation(const FHitResult eventData)
 	OnDropped.Broadcast(eventData);
 }
 
-void UDropView::HandleBeginCursorOver_Implementation(UPrimitiveComponent* touchedComponent)
+void UDropView::HandleBeginCursorOver(UPrimitiveComponent* touchedComponent)
 {
 	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
 
@@ -58,7 +56,7 @@ void UDropView::HandleBeginCursorOver_Implementation(UPrimitiveComponent* touche
 	}
 }
 
-void UDropView::HandleEndCursorOver_Implementation(UPrimitiveComponent* touchedComponent)
+void UDropView::HandleEndCursorOver(UPrimitiveComponent* touchedComponent)
 {
 	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
 
@@ -67,3 +65,14 @@ void UDropView::HandleEndCursorOver_Implementation(UPrimitiveComponent* touchedC
 		UE_LOG(LogTemp, Warning, TEXT("End Cursor Over"));
 	}
 }
+#if PLATFORM_ANDROID || PLATFORM_IOS
+void UDropView::HandleEndCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent)
+{
+	HandleEndCursorOver(touchedComponent);
+}
+
+void UDropView::HandleBeginCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent)
+{
+	HandleBeginCursorOver(touchedComponent);
+}
+#endif

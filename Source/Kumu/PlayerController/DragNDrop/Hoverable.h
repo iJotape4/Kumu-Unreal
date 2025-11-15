@@ -21,12 +21,18 @@ class KUMU_API IHoverable
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Hover")
-	void HandleBeginCursorOver(UPrimitiveComponent* touchedComponent);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Hover")
-	void HandleEndCursorOver(UPrimitiveComponent* touchedComponent);
+#if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
+	virtual void HandleBeginCursorOver(UPrimitiveComponent* touchedComponent) =0;
+	virtual void HandleEndCursorOver(UPrimitiveComponent* touchedComponent) =0;
+#endif
 
+#if PLATFORM_ANDROID || PLATFORM_IOS	
+	virtual void HandleBeginCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent) =0;
+	virtual void HandleEndCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent) =0;
+#endif
+	
+	
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 };

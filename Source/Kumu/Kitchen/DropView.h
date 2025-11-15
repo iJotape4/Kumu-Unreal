@@ -28,10 +28,19 @@ protected:
 	
 	virtual void Drop_Implementation(const FHitResult eventData) override;
 
-	virtual void HandleBeginCursorOver_Implementation(UPrimitiveComponent* touchedComponent) override;
+	UFUNCTION()
+	virtual void HandleBeginCursorOver(UPrimitiveComponent* touchedComponent) override;
 	
-	virtual void HandleEndCursorOver_Implementation(UPrimitiveComponent* touchedComponent) override;
-
+	UFUNCTION()
+	virtual void HandleEndCursorOver(UPrimitiveComponent* touchedComponent) override;
+	
+#if PLATFORM_ANDROID || PLATFORM_IOS
+	
+	virtual void HandleEndCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent) override;
+	
+	virtual void HandleBeginCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent) override;
+#endif
+	
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDropped OnDropped;
