@@ -44,27 +44,33 @@ void UDropView::OnRegister()
 void UDropView::Drop_Implementation(const FHitResult eventData)
 {
 	OnDropped.Broadcast(eventData);
+	RestoreHoveredObjectScale();
 }
 
 void UDropView::HandleBeginCursorOver(UPrimitiveComponent* touchedComponent)
 {
-	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
+	if (!CachedPlayerController || !CachedPlayerController->IsDragging() ) return;
 
 	if (UActorComponent* draggedActor =  CachedPlayerController->GetDraggedActor().Get())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Begin Cursor Over"));
+		
+			//TODO check if is interactable with me.
+		
+			CurrentPointerDrag = draggedActor->GetOwner();
+			initialHoveredScale =CurrentPointerDrag->GetActorScale();
+			CurrentPointerDrag->SetActorRelativeScale3D(initialHoveredScale*0.7f);
 	}
 }
 
 void UDropView::HandleEndCursorOver(UPrimitiveComponent* touchedComponent)
 {
 	if (!CachedPlayerController || !CachedPlayerController->IsDragging()) return;
-
-	if (UActorComponent* draggedActor =  CachedPlayerController->GetDraggedActor().Get())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("End Cursor Over"));
-	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("End Cursor Over"));
+	RestoreHoveredObjectScale();
 }
+
 #if PLATFORM_ANDROID || PLATFORM_IOS
 void UDropView::HandleEndCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent)
 {
@@ -76,3 +82,12 @@ void UDropView::HandleBeginCursorOver(ETouchIndex::Type touchIndex, UPrimitiveCo
 	HandleBeginCursorOver(touchedComponent);
 }
 #endif
+
+
+void UDropView::RestoreHoveredObjectScale()
+{
+	if (initialHoveredScale == FVector::ZeroVector) return;
+	
+	CurrentPointerDrag->SetActorRelativeScale3D(initialHoveredScale);
+	initialHoveredScale = FVector::ZeroVector;
+}

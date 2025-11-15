@@ -40,14 +40,21 @@ protected:
 	
 	virtual void HandleBeginCursorOver(ETouchIndex::Type touchIndex, UPrimitiveComponent* touchedComponent) override;
 #endif
-	
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDropped OnDropped;
+
+private:
+	void RestoreHoveredObjectScale();
+
+public:
+	AActor* CurrentPointerDrag;
 private:
 	TObjectPtr<AActor> OwnerActor;
 	UPrimitiveComponent* PrimitiveComponent;
 	
 	UPROPERTY(Transient)
 	ADragNDropController* CachedPlayerController;
+
+	FVector initialHoveredScale;
 };
